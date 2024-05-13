@@ -1,5 +1,7 @@
 from flask import Flask
 from flask import json
+import logging
+
 app = Flask(__name__)
 
 @app.route("/status")
@@ -22,7 +24,10 @@ def metrics():
 
 @app.route("/")
 def hello():
+    app.logger.info("Main request successfull")
+    app.logger.debug("Main request successfull debug")
     return "Hello World!"
 
 if __name__ == "__main__":
+    logging.basicConfig(filename='app.log', encording='utf-8', level=logging.INFO)
     app.run(host='0.0.0.0')
