@@ -1,0 +1,20 @@
+
+# Vagrant fileを利用し、仮想マシンを構築
+vagrant up
+
+# Vagrant upで構築した仮想マシンにsshログインする。
+vagrant ssh
+
+
+#### 仮想マシン内.... ####
+
+# k3sをインストール
+curl -sfL https://get.k3s.io | sh -
+
+# k3s kebectl で nodeを取得
+# k3s: k8s (= k[ubernete」s)の機能削減版
+
+# クラスターの情報を取
+kubectl cluster-info
+
+
