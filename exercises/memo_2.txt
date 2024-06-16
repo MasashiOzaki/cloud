@@ -1,0 +1,38 @@
+localhost:/home/vagrant # kubectl get deploy
+No resources found in default namespace.
+localhost:/home/vagrant # kubectl get rs
+No resources found in default namespace.
+localhost:/home/vagrant # kubectl create deploy
+error: required flag(s) "image" not set
+localhost:/home/vagrant # kubectl create deploy go-helloworld
+error: required flag(s) "image" not set
+localhost:/home/vagrant # kubectl create deploy go-helloworld  --image masashiozaki/go-helloworld:v1.0.0
+deployment.apps/go-helloworld created
+localhost:/home/vagrant #
+localhost:/home/vagrant # kubectl get rs
+NAME                       DESIRED   CURRENT   READY   AGE
+go-helloworld-78b6c5bb68   1         1         0       5s
+localhost:/home/vagrant # kubectl get po
+NAME                             READY   STATUS    RESTARTS   AGE
+go-helloworld-78b6c5bb68-n2w8z   1/1     Running   0          11s
+localhost:/home/vagrant #
+
+
+localhost:/home/vagrant # kubectl get deploy
+NAME            READY   UP-TO-DATE   AVAILABLE   AGE
+go-helloworld   1/1     1            1           57s
+localhost:/home/vagrant #
+:
+localhost:/home/vagrant # kubectl port-forward go-helloworld-78b6c5bb68-n2w8z 6111:6111
+Forwarding from 127.0.0.1:6111 -> 6111
+Forwarding from [::1]:6111 -> 6111
+
+
+# create service for an existing deployment
+kubernetes expose deployment
+
+# Ingress
+外部ユーザーからクラスタ内のサービスへのアクセスを可能にする
+外部ユーザー → Ingress -> (Ingress controller) loadBalancer -> pod
+
+

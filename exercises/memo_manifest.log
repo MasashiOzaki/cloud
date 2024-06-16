@@ -1,0 +1,121 @@
+(base) mozaki@goku:~/001_CODE/900_Study/001_cloud/nd064_course_1/exercises$ vagrant ssh
+Last login: Mon May 20 13:18:19 2024 from 10.0.2.2
+Have a lot of fun...
+vagrant@localhost:~> klubectl get ns
+If 'klubectl' is not a typo you can use command-not-found to lookup the package that contains it, like this:
+    cnf klubectl
+vagrant@localhost:~>
+vagrant@localhost:~> kubectl get ns
+WARN[0000] Unable to read /etc/rancher/k3s/k3s.yaml, please start server with --write-kubeconfig-mode to modify kube config permissions
+error: error loading config file "/etc/rancher/k3s/k3s.yaml": open /etc/rancher/k3s/k3s.yaml: permission denied
+vagrant@localhost:~>
+vagrant@localhost:~>
+vagrant@localhost:~> curl -sfL https://get.k3s.io | sh -
+[INFO]  Finding release for channel stable
+[INFO]  Using v1.29.4+k3s1 as release
+[INFO]  Downloading hash https://github.com/k3s-io/k3s/releases/download/v1.29.4+k3s1/sha256sum-amd64.txt
+[INFO]  Skipping binary downloaded, installed k3s matches hash
+[INFO]  Skipping installation of SELinux RPM
+[INFO]  Skipping /usr/local/bin/kubectl symlink to k3s, already exists
+[INFO]  Skipping /usr/local/bin/crictl symlink to k3s, already exists
+[INFO]  Skipping /usr/local/bin/ctr symlink to k3s, already exists
+[INFO]  Creating killall script /usr/local/bin/k3s-killall.sh
+[INFO]  Creating uninstall script /usr/local/bin/k3s-uninstall.sh
+[INFO]  env: Creating environment file /etc/systemd/system/k3s.service.env
+[INFO]  systemd: Creating service file /etc/systemd/system/k3s.service
+[INFO]  systemd: Enabling k3s unit
+Created symlink /etc/systemd/system/multi-user.target.wants/k3s.service → /etc/systemd/system/k3s.service.
+[INFO]  No change detected so skipping service start
+vagrant@localhost:~>
+vagrant@localhost:~> kubectl get ns
+WARN[0000] Unable to read /etc/rancher/k3s/k3s.yaml, please start server with --write-kubeconfig-mode to modify kube config permissions
+error: error loading config file "/etc/rancher/k3s/k3s.yaml": open /etc/rancher/k3s/k3s.yaml: permission denied
+vagrant@localhost:~> sudo su
+localhost:/home/vagrant #  kubectl get ns
+NAME              STATUS   AGE
+kube-system       Active   47h
+kube-public       Active   47h
+kube-node-lease   Active   47h
+default           Active   47h
+test-udacity      Active   24h
+localhost:/home/vagrant #
+localhost:/home/vagrant #
+localhost:/home/vagrant # kubectl create ns demo --dry-run=client -o yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: demo
+spec: {}
+status: {}
+localhost:/home/vagrant #
+
+
+localhost:/home/vagrant # kubectl create ns demo --dry-run=client -o yaml > namespace.yaml
+localhost:/home/vagrant #
+localhost:/home/vagrant # kubectl apply -f namespace.yaml
+namespace/demo created
+localhost:/home/vagrant #
+
+localhost:/home/vagrant # kubectl get ns
+NAME              STATUS   AGE
+kube-system       Active   47h
+kube-public       Active   47h
+kube-node-lease   Active   47h
+default           Active   47h
+test-udacity      Active   24h
+demo              Active   16s
+localhost:/home/vagrant #
+
+localhost:/home/vagrant # kubectl create deploy busyvox
+error: required flag(s) "image" not set
+localhost:/home/vagrant # kubectl create deploy busybox --image=busybox -r=5 -n demo --dry-run=client -o yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: busybox
+  name: busybox
+  namespace: demo
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: busybox
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: busybox
+    spec:
+      containers:
+      - image: busybox
+        name: busybox
+        resources: {}
+status: {}
+localhost:/home/vagrant # kubectl create deploy busybox --image=busybox -r=5 -n demo --dry-run=client -o yaml > deploy.yaml
+localhost:/home/vagrant #
+localhost:/home/vagrant #
+localhost:/home/vagrant # kubectl apply -f deploy.yaml
+deployment.apps/busybox created
+localhost:/home/vagrant #
+localhost:/home/vagrant #
+localhost:/home/vagrant # kubectl get ns
+NAME              STATUS   AGE
+kube-system       Active   47h
+kube-public       Active   47h
+kube-node-lease   Active   47h
+default           Active   47h
+test-udacity      Active   24h
+demo              Active   3m16s
+localhost:/home/vagrant #
+localhost:/home/vagrant #
+localhost:/home/vagrant # kubectl get deploy
+NAME            READY   UP-TO-DATE   AVAILABLE   AGE
+go-helloworld   1/1     1            1           47h
+localhost:/home/vagrant # kubectl get deploy -n demo
+NAME      READY   UP-TO-DATE   AVAILABLE   AGE
+busybox   0/5     5            0           41s
+localhost:/home/vagrant #

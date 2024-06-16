@@ -1,0 +1,49 @@
+(base) mozaki@goku:~/001_CODE/900_Study/001_cloud/nd064_course_1/exercises$ vagrant up
+Bringing machine 'default' up with 'virtualbox' provider...
+==> default: Checking if box 'opensuse/Leap-15.2.x86_64' version '15.2.31.632' is up to date...
+==> default: Machine already provisioned. Run `vagrant provision` or use the `--provision`
+==> default: flag to force provisioning. Provisioners marked to run always will still run.
+(base) mozaki@goku:~/001_CODE/900_Study/001_cloud/nd064_course_1/exercises$ vagrant ssh
+Last login: Sun May 19 14:45:00 2024 from 10.0.2.2
+Have a lot of fun...
+vagrant@localhost:~>
+vagrant@localhost:~> kuberctl get cm
+If 'kuberctl' is not a typo you can use command-not-found to lookup the package that contains it, like this:
+    cnf kuberctl
+vagrant@localhost:~> kubectl get cm
+WARN[0000] Unable to read /etc/rancher/k3s/k3s.yaml, please start server with --write-kubeconfig-mode to modify kube config permissions
+error: error loading config file "/etc/rancher/k3s/k3s.yaml": open /etc/rancher/k3s/k3s.yaml: permission denied
+vagrant@localhost:~>
+vagrant@localhost:~> sudo su
+localhost:/home/vagrant # kuberctl get cm
+If 'kuberctl' is not a typo you can use command-not-found to lookup the package that contains it, like this:
+    cnf kuberctl
+localhost:/home/vagrant #
+localhost:/home/vagrant # kubectl get cm
+NAME               DATA   AGE
+kube-root-ca.crt   1      22h
+localhost:/home/vagrant #
+localhost:/home/vagrant #
+localhost:/home/vagrant # kubectl create cm test-cm --from-literal=color=blue
+configmap/test-cm created
+localhost:/home/vagrant # kubectl get cm
+NAME               DATA   AGE
+kube-root-ca.crt   1      22h
+test-cm            1      7s
+localhost:/home/vagrant # kubectl describe cm test-cm
+Name:         test-cm
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+color:
+----
+blue
+
+BinaryData
+====
+
+Events:  <none>
+localhost:/home/vagrant #
